@@ -1,12 +1,13 @@
 import { Col, Layout, Menu, Row } from 'antd'
 import { FC } from 'react'
 import { useNavigate } from 'react-router-dom'
+import { useAppSelector } from '../hooks/redux'
 import { RouteNames } from '../routes'
 
 const Navbar: FC = () => {
 	const navigate = useNavigate()
+	const { isAuth } = useAppSelector(state => state.auth)
 
-	const auth = false
 	return (
 		<Layout.Header
 			style={{
@@ -17,7 +18,7 @@ const Navbar: FC = () => {
 		>
 			<Row justify='end'>
 				<Col style={{ display: 'flex', alignItems: 'center' }}>
-					{auth ? (
+					{isAuth ? (
 						<>
 							<span style={{ color: '#fff' }}>BeltoM</span>
 							<Menu
