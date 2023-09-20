@@ -1,8 +1,9 @@
 import { createAsyncThunk } from '@reduxjs/toolkit'
 import axios from 'axios'
+import { setAuth, setUser } from '.'
 import { IUser } from '../../../models/IUser'
 
-export const fetchUsers = createAsyncThunk(
+export const login = createAsyncThunk(
 	'auth/fetchUsers',
 	async ({ username, password }: IUser, thunkAPI) => {
 		try {
@@ -13,14 +14,16 @@ export const fetchUsers = createAsyncThunk(
 			if (providedUser) {
 				localStorage.setItem('auth', 'true')
 				localStorage.setItem('username', providedUser.username)
+				thunkAPI.dispatch(setAuth(true))
+				thunkAPI.dispatch(setUser(providedUser))
 			} else {
-				throw new Error('Incorrect User Data')
+				throw new Error('Invalid User Data')
 			}
 
 			return providedUser
 		} catch (e) {
 			const errorMessage = e instanceof Error ? e.message : String(e)
-			thunkAPI.rejectWithValue(errorMessage)
+			return thunkAPI.rejectWithValue(errorMessage)
 		}
 	}
 )

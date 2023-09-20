@@ -1,6 +1,6 @@
 import { PayloadAction, createSlice } from '@reduxjs/toolkit'
 import { IUser } from '../../../models/IUser'
-import { fetchUsers } from './ActionCreators'
+import { login } from './ActionCreators'
 
 interface IAuthState {
 	isAuth: boolean
@@ -20,33 +20,35 @@ export const authSlice = createSlice({
 	name: 'auth',
 	initialState,
 	reducers: {
-		setAuth: (state, action: PayloadAction<boolean>) => {
-			state.isAuth = action.payload
+		setAuth: (state, { payload }: PayloadAction<boolean>) => {
+			state.isAuth = payload
 		},
-		setError: (state, action: PayloadAction<string>) => {
-			state.error = action.payload
+		setError: (state, { payload }: PayloadAction<string>) => {
+			state.error = payload
 			state.isLoading = false
 		},
-		setLoading: (state, action: PayloadAction<boolean>) => {
-			state.isLoading = action.payload
+		setLoading: (state, { payload }: PayloadAction<boolean>) => {
+			state.isLoading = payload
 		},
-		setUser: (state, action: PayloadAction<IUser>) => {
-			state.user = action.payload
+		setUser: (state, { payload }: PayloadAction<IUser>) => {
+			state.user = payload
 			state.isLoading = false
 		},
 	},
-	extraReducers: {
-		[fetchUsers.fulfilled.type]: state => {
+	extraReducers: builder => {
+		builder.addCase(login.fulfilled, state => {
 			state.isLoading = false
-		},
-		[fetchUsers.pending.type]: state => {
+		})
+		builder.addCase(login.pending, state => {
 			state.isLoading = true
-		},
-		[fetchUsers.rejected.type]: (state, action: PayloadAction<string>) => {
-			state.error = action.payload
+		})
+		builder.addCase(login.rejected, (state, action) => {
+			state.error = action.payload as string
 			state.isLoading = false
-		},
+		})
 	},
 })
+
+export const { setAuth, setError, setLoading, setUser } = authSlice.actions
 
 export default authSlice.reducer

@@ -1,15 +1,23 @@
 import { Button, Form, Input } from 'antd'
+import { useAppDispatch, useAppSelector } from '../hooks/redux'
+import { login } from '../store/reducers/auth/ActionCreators.ts'
 import { rules } from '../utils/rules'
 
 const LoginForm = () => {
-	const handleFinish = () => {}
+	const dispatch = useAppDispatch()
+	const { error, isLoading } = useAppSelector(state => state.auth)
+
+	const handleSubmit = () => {
+		dispatch(login({ username: 'BeltoM', password: '123' }))
+	}
 
 	return (
 		<Form
 			wrapperCol={{ span: 20 }}
 			labelCol={{ span: 8 }}
-			onFinish={handleFinish}
+			onFinish={handleSubmit}
 		>
+			{error && <div style={{ color: 'red' }}>{error}</div>}
 			<Form.Item
 				label='Username'
 				name='username'
@@ -25,7 +33,7 @@ const LoginForm = () => {
 				<Input />
 			</Form.Item>
 			<Form.Item>
-				<Button type='primary' htmlType='submit'>
+				<Button type='primary' htmlType='submit' loading={isLoading}>
 					Login
 				</Button>
 			</Form.Item>
