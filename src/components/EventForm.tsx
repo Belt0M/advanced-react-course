@@ -1,7 +1,8 @@
 import { Button, DatePicker, Form, Input, Row } from 'antd'
+import React from 'react'
 import { rules } from '../utils/rules'
 
-const EventForm = () => {
+const EventForm: React.FC = () => {
 	return (
 		<Form wrapperCol={{ span: 20 }} labelCol={{ span: 8 }}>
 			<Form.Item
