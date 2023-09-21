@@ -30,7 +30,7 @@ export const authSlice = createSlice({
 		setLoading: (state, { payload }: PayloadAction<boolean>) => {
 			state.isLoading = payload
 		},
-		setUser: (state, { payload }: PayloadAction<IUser>) => {
+		setUser: (state, { payload }: PayloadAction<IUser | null>) => {
 			state.user = payload
 			state.isLoading = false
 		},

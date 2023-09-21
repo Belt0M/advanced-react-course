@@ -4,7 +4,7 @@ import { setAuth, setUser } from '.'
 import { IUser } from '../../../models/IUser'
 
 export const login = createAsyncThunk(
-	'auth/fetchUsers',
+	'auth/login',
 	async ({ username, password }: IUser, thunkAPI) => {
 		try {
 			const response = await axios.get<IUser[]>('./users.json')
@@ -25,5 +25,15 @@ export const login = createAsyncThunk(
 			const errorMessage = e instanceof Error ? e.message : String(e)
 			return thunkAPI.rejectWithValue(errorMessage)
 		}
+	}
+)
+
+export const logout = createAsyncThunk(
+	'auth/logout',
+	async (_, { dispatch }) => {
+		localStorage.removeItem('auth')
+		localStorage.removeItem('username')
+		dispatch(setAuth(false))
+		dispatch(setUser(null))
 	}
 )

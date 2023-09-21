@@ -1,12 +1,15 @@
 import { Col, Layout, Menu, Row } from 'antd'
 import { FC } from 'react'
 import { useNavigate } from 'react-router-dom'
-import { useAppSelector } from '../hooks/redux'
+import { useAppDispatch, useAppSelector } from '../hooks/redux'
 import { RouteNames } from '../routes'
+import { logout } from '../store/reducers/auth/ActionCreators'
 
 const Navbar: FC = () => {
 	const navigate = useNavigate()
-	const { isAuth } = useAppSelector(state => state.auth)
+	const { isAuth, user } = useAppSelector(state => state.auth)
+
+	const dispatch = useAppDispatch()
 
 	return (
 		<Layout.Header
@@ -20,12 +23,12 @@ const Navbar: FC = () => {
 				<Col style={{ display: 'flex', alignItems: 'center' }}>
 					{isAuth ? (
 						<>
-							<span style={{ color: '#fff' }}>BeltoM</span>
+							<span style={{ color: '#fff' }}>{user?.username}</span>
 							<Menu
 								theme='dark'
 								mode='inline'
 								selectable={false}
-								onClick={() => console.log('Logout')}
+								onClick={() => dispatch(logout())}
 								items={[{ label: 'Logout', key: RouteNames.EVENT }]}
 							/>
 						</>
