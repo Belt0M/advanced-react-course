@@ -1,13 +1,29 @@
 import { Button, Layout, Modal, Row } from 'antd'
-import { FC, useState } from 'react'
+import React, { useEffect, useState } from 'react'
 import EventCalendar from '../components/EventCalendar'
 import EventForm from '../components/EventForm'
+import { useAppDispatch, useAppSelector } from '../hooks/redux'
+import { IEvent } from '../models/IEvent'
+import { fetchGuests, postEvent } from '../store/reducers/event/event-thunk'
 
-const Event: FC = () => {
+const Event: React.FC = () => {
 	const [modalVisible, setModalVisible] = useState(false)
+	const dispatch = useAppDispatch()
+	const { guests, events } = useAppSelector(state => state.event)
+
+	useEffect(() => {
+		dispatch(fetchGuests())
+		// eslint-disable-next-line react-hooks/exhaustive-deps
+	}, [])
+
+	const addNewEvent = (event: IEvent) => {
+		setModalVisible(false)
+		dispatch(postEvent(event))
+	}
 
 	return (
 		<Layout>
+			{JSON.stringify(events)}
 			<EventCalendar events={[]} />
 			<Row justify='center'>
 				<Button onClick={() => setModalVisible(true)}>Add Event</Button>
@@ -18,7 +34,7 @@ const Event: FC = () => {
 				open={modalVisible}
 				onCancel={() => setModalVisible(false)}
 			>
-				<EventForm />
+				<EventForm guests={guests} submit={addNewEvent} />
 			</Modal>
 		</Layout>
 	)
