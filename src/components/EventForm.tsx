@@ -37,7 +37,6 @@ const EventForm: React.FC<EventFormProps> = ({ guests, submit }) => {
 
 	const handleSubmit = () => {
 		submit({ ...event, author: user!.username })
-		console.log({ ...event, author: user!.username })
 	}
 
 	return (

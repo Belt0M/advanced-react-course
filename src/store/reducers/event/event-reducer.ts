@@ -1,7 +1,7 @@
 import { PayloadAction, createSlice } from '@reduxjs/toolkit'
 import { IUser } from '../../../models/IUser'
 import { IEvent } from './../../../models/IEvent'
-import { fetchGuests, postEvent } from './event-thunk'
+import { fetchEvents, fetchGuests, postEvent } from './event-thunk'
 
 interface EventState {
 	guests: IUser[]
@@ -48,6 +48,17 @@ export const eventSlice = createSlice({
 			state.isLoading = true
 		})
 		builder.addCase(postEvent.rejected, (state, { payload }) => {
+			state.isLoading = false
+			state.error = payload as string
+		})
+		builder.addCase(fetchEvents.fulfilled, (state, { payload }) => {
+			state.isLoading = false
+			state.events = payload as IEvent[]
+		})
+		builder.addCase(fetchEvents.pending, state => {
+			state.isLoading = true
+		})
+		builder.addCase(fetchEvents.rejected, (state, { payload }) => {
 			state.isLoading = false
 			state.error = payload as string
 		})
