@@ -54,7 +54,14 @@ const EventForm: React.FC<EventFormProps> = ({ guests, submit }) => {
 					onChange={e => setEvent({ ...event, description: e.target.value })}
 				/>
 			</Form.Item>
-			<Form.Item label='Event date' name='date' rules={[rules.required()]}>
+			<Form.Item
+				label='Event date'
+				name='date'
+				rules={[
+					rules.required(),
+					rules.isDateAfter('The selected date cannot be in the past'),
+				]}
+			>
 				<DatePicker onChange={handleDateChange} />
 			</Form.Item>
 			<Form.Item label='Select guest' name='guest' rules={[rules.required()]}>
